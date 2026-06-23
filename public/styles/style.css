@@ -1,0 +1,15 @@
+body {
+  background-color: rgb(25, 25, 58);
+  color: whitesmoke;
+}
+
+.form_data {
+  background-color: rgb(74, 58, 81);
+  margin: 10px 0;
+  border: 2px solid #f7f7f9a2;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

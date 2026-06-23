@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Books Read</title>
+    <%- include('partials/header') %>
+    <link rel="stylesheet" href="/styles/style.css" />
+
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1>Christian George-Igbinidu</h1>
+      <h2>Books i've read</h2>
+
+      <!-- task: add a way to sort books rating -->
+
+      <p>Sort books read by: </p>
+      
+
+      <form action="/sort" method="post">
+        <div class="form_data">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sort_books" value="review" id="review">
+            <label class="form-label" for="review">review</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sort_books" id="date_read" value="date_read">
+            <label class="form-label" for="date_read">date read</label>
+          </div>
+          <input type="submit" class="btn btn-secondary" value="update filter">
+        </div>
+      </form>
+
+      
+      <br>
+      
+      
+      <%  if (locals.text)  {  %>
+        <p>Sort By: <%= text %></p>
+        <% } %>
+        
+        
+        <div class="action-btns d-flex gap-2">
+          <a href="/" class="btn btn-success">Home</a>
+          <a href="/add" class="btn btn-light">Add a book</a>
+        </div>
+      <% books.forEach((book)=> { %>
+        <div class="book_container py-4 my-5">
+          <div id="book_cover"><img src="https://covers.openlibrary.org/b/isbn/<%=book.isbn%>-M.jpg" alt="" /></div>
+      
+          <h3 id="book_title<%=book.id%>"><%= book.book_title %></h3>
+      
+          <div id="review<%=book.id%>">Rating: <%= book.review %> / 5</div>
+      
+          <div id="date_read<%=book.id%>">Date: <%= new Date(book.date_read).toLocaleDateString() %></div>
+      
+          <div id="book_comment<%=book.id%>">Comment: <%= book.comment %></div>
+      
+          <p id="isbn<%=book.id%>">ISBN: <%= book.isbn %></p>
+      
+      
+      
+          <form action="/edit" method="post">
+              <div class="d-flex flex-column gap-1 my-2">
+                <input type="hidden" name="updatedItemId" value="<%=book.id%>">
+                <div class="form-group">
+                  <input class="form-control" type="text" id="updated_book_title<%=book.id%>" name="updated_book_title" value="<%=book.book_title%>" hidden="true">
+                </div>
+                <div class="form-group">
+                  <select class="form-control" name="updated_review" id="updated_review<%=book.id%>" required hidden="true" >
+                    <option selected="selected"><%= book.review %></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+                <div class="form-group"><input class="form-control" type="date" id="updated_date_read<%=book.id%>" name="updated_date_read" value="<%=new Date(book.date_read).toLocaleDateString()%>" hidden="true" ></div>
+                <div class="form-group"><textarea class="form-control" name="updated_book_comment" id="updated_book_comment<%=book.id%>" hidden="true"><%=book.comment %></textarea></div>
+                <div class="form-group"><input class="form-control" type="text" id="updated_isbn<%=book.id%>" name="updated_isbn" value="<%= book.isbn %>" hidden="true"></div>
+            
+                <!-- fix issue here -->
+                <button id="submit<%=book.id%>" class="btn btn-success" type="submit" hidden="true">Submit</button>
+              </div>
+            </form>
+          <div class="form-actions d-flex gap-2">
+            <button class="btn btn-primary edit_btn" id="edit<%=book.id%>" onclick="handler('<%=book.id%>')">Edit</button>
+            <form action="/delete" method="post">
+              <input type="hidden" name="itemId" value="<%=book.id%>">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          </div>
+        </div>
+      
+      <% }) %>
+      <script>
+      function handler(id) {
+        document.getElementById("book_title" + id).setAttribute("hidden", true)
+        document.getElementById("review" + id).setAttribute("hidden", true)
+        document.getElementById("date_read" + id).setAttribute("hidden", true)
+        document.getElementById("book_comment" + id).setAttribute("hidden", true)
+        document.getElementById("isbn" + id).setAttribute("hidden", true)
+        document.getElementById("updated_book_title" + id).removeAttribute("hidden")
+        document.getElementById("updated_review" + id).removeAttribute("hidden")
+        document.getElementById("updated_date_read" + id).removeAttribute("hidden")
+        document.getElementById("updated_book_comment" + id).removeAttribute("hidden")
+        document.getElementById("updated_isbn" + id).removeAttribute("hidden")
+        document.getElementById("submit" + id).removeAttribute("hidden")
+      }
+
+
+      
+      </script>
+      
+      
+      <%- include('partials/footer') %>
+    </div>
+  </body>
+</html>
